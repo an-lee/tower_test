@@ -72,3 +72,4 @@
   - title
   - content
   - user_id
+  - team_id
