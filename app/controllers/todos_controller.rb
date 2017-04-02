@@ -12,6 +12,13 @@ class TodosController < ApplicationController
     @todo.user = current_user
 
     if @todo.save
+      @event = Event.new(:action => "创建了任务",
+                         :content => @todo.description,
+                         :title => @todo.title)
+      @event.user = current_user
+      @event.project = @project
+      @event.team = @project.team
+      @event.save!
       redirect_to project_path(@project)
     else
       render :new
@@ -25,6 +32,13 @@ class TodosController < ApplicationController
   def update
     @todo = Todo.find(params[:id])
     @todo.update(todo_params)
+    @event = Event.new(:action => "更新了任务",
+                       :content => @todo.description,
+                       :title => @todo.title)
+    @event.user = current_user
+    @event.project = @project
+    @event.team = @project.team
+    @event.save!
     redirect_to project_path(@project)
   end
 

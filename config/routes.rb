@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
-  root 'projects#index'
+  root 'teams#index'
 
   resources :teams do
     resources :projects

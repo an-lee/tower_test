@@ -1,0 +1,32 @@
+<div class="col-md-12">
+  <div class="group">
+
+    <%= link_to("创建新项目", new_team_project_path(@team), class:"btn btn-default pull-right") %>
+    <% if current_user && current_user == @team.user %>
+      <%= link_to("Edit", edit_team_path(@team), class: "btn btn-primary pull-right") %>
+    <% end %>
+  </div>
+  <h2><%= @team.title %></h2>
+  <p><%= @team.description %></p>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>项目名称</th>
+        <th>项目描述</th>
+        <th>项目创建人</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @projects.each do |project| %>
+        <tr>
+          <td><%= link_to(project.title, project_path(project)) %></td>
+          <td><%= project.description %></td>
+          <td><%= project.user.email %></td>
+          <td><%= link_to("编辑项目", edit_team_project_path(@team, project), class: "btn btn-default btn-sm")%></td>
+        </tr>
+      <% end %>
+    </tbody>
+</table>
+
+</div>

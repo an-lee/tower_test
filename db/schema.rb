@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170402035602) do
+ActiveRecord::Schema.define(version: 20170402081800) do
 
   create_table "accesses", force: :cascade do |t|
     t.integer  "user_id"
@@ -24,9 +24,11 @@ ActiveRecord::Schema.define(version: 20170402035602) do
     t.string   "title"
     t.text     "content"
     t.integer  "user_id"
+    t.integer  "team_id"
+    t.integer  "project_id"
+    t.integer  "todo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "team_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -41,8 +43,16 @@ ActiveRecord::Schema.define(version: 20170402035602) do
     t.string   "title"
     t.text     "description"
     t.integer  "user_id"
+    t.integer  "team_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+  end
+
+  create_table "team_relationships", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "team_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "teams", force: :cascade do |t|
@@ -59,9 +69,9 @@ ActiveRecord::Schema.define(version: 20170402035602) do
     t.datetime "due"
     t.integer  "assign"
     t.integer  "user_id"
+    t.integer  "project_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.integer  "project_id"
   end
 
   create_table "users", force: :cascade do |t|

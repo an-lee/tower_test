@@ -1,0 +1,6 @@
+<div class="container">
+  <% @events.each do |event| %>
+    <%= event.created_at.strftime("%-d/%-m/%y: %H:%M %Z") %>, <%= event.user.email %> <%= event.action %> <%= event.title %> <br> <%= event.content %>
+    <hr>
+  <% end %>
+</div>
