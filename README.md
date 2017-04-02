@@ -20,4 +20,3 @@
 - access 模型
   - user_id
   - project_id
-  - team_id

@@ -7,19 +7,18 @@ class User < ApplicationRecord
   has_many :projects
   has_many :teams
   has_many :accesses
-  has_many :participated_teams, :through => :accesses, :source => :team
   has_many :participated_projects, :through => :accesses, :source => :project
 
-  def is_member_of?(team)
-    participated_teams.include?(team)
+  def is_member_of?(project)
+    participated_projects.include?(project)
   end
 
-  def join!(team)
-    participated_teams << team
+  def join!(project)
+    participated_projects << project
   end
 
-  def quit!(team)
-    participated_teams.delete(team)
+  def quit!(project)
+    participated_projects.delete(project)
   end
 
 end

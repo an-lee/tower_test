@@ -14,7 +14,6 @@ ActiveRecord::Schema.define(version: 20170402015631) do
 
   create_table "accesses", force: :cascade do |t|
     t.integer  "user_id"
-    t.integer  "team_id"
     t.integer  "project_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
