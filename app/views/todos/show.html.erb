@@ -1,0 +1,12 @@
+<div class="col-md-12">
+  <%= link_to("发表讨论", new_project_todo_message_path(@project, @todo), class:"btn btn-default") %>
+  <h2><%= @todo.title %></h2>
+  <p><%= @todo.description %></p>
+<hr>
+  <% @messages.each do |message| %>
+    <%= message.user.email %> 发表评论： <br>
+    <%= message.content %>
+    <hr>
+  <% end %>
+
+</div>

@@ -2,6 +2,7 @@ class Todo < ApplicationRecord
   belongs_to :project
   belongs_to :user
   has_many :events
+  has_many :messages
 
   def untrash!
     self.is_trash = false

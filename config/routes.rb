@@ -17,6 +17,7 @@ Rails.application.routes.draw do
         patch :assign
         patch :due
       end
+    resources :messages
     end
   end
 

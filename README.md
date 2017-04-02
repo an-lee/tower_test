@@ -30,6 +30,8 @@
 
 /projects/:project_id/messages/:id
 
+/projects/:project_id/todos/:todo_id
+
 ### 动态
 
 /teams/:team_id/events
@@ -73,7 +75,7 @@
     - [+] 删除了任务
     - [+] 完成了任务
     - [+] 恢复了任务
-    - 回复了任务
+    - [+]回复了任务
     - [+]给 xxx 指派了任务
     - [+]把 xxx 的任务指派给 xxx
     - [+]将任务完成时间从 xxx 修改为 xxx
