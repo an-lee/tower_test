@@ -8,7 +8,16 @@ Rails.application.routes.draw do
   end
 
   resources :projects do
-    resources :todos
+    resources :todos do
+      member do
+        post :trash
+        post :untrash
+        post :complete
+        post :uncomplete
+        patch :assign
+        patch :due
+      end
+    end
   end
 
   resources :projects do

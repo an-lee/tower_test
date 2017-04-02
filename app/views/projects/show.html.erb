@@ -26,9 +26,33 @@
           <td><%= todo.user.email %></td>
           <td><%= todo.title %></td>
           <td><%= todo.description %></td>
-          <td><%= todo.due %></td>
-          <td><%= todo.assign %></td>
-          <td><%= link_to("编辑任务", edit_project_todo_path(@project, todo), class: "btn btn-default btn-sm")%></td>
+          <td>
+            <%= simple_form_for todo, url: due_project_todo_path(@project,todo) do |f| %>
+              <%= f.input :due  %>
+              <%= f.submit "Update", data: {disable_with:"Submitting..."} %>
+            <% end %>
+            <%= todo.due %>
+          </td>
+          <td>
+            <%= simple_form_for todo, url: assign_project_todo_path(@project,todo) do |f| %>
+              <%= f.select :assign, [1,2,3,4,5] %>
+              <%= f.submit "Update", data: {disable_with:"Submitting..."} %>
+            <% end %>
+            <%= todo.assign %>
+          </td>
+          <td>
+            <%= link_to("编辑任务", edit_project_todo_path(@project, todo), class: "btn btn-default btn-sm")%>
+            <% if todo.is_trash %>
+              <%= link_to("恢复任务", untrash_project_todo_path(@project,todo), class: "btn btn-default btn-sm", :method => :post) %>
+            <% else %>
+              <%= link_to("删除任务", trash_project_todo_path(@project,todo) ,class: "btn btn-default btn-sm", :method => :post) %>
+            <% end %>
+            <% if todo.is_completed %>
+              <%= link_to("撤销完成", uncomplete_project_todo_path(@project,todo) ,class: "btn btn-default btn-sm", :method => :post) %>
+            <% else %>
+              <%= link_to("完成任务", complete_project_todo_path(@project,todo), class: "btn btn-default btn-sm", :method => :post) %>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>
