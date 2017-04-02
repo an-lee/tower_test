@@ -3,7 +3,7 @@ class EventsController < ApplicationController
   before_action :find_team, :only => [:index, :new, :create, :destroy]
 
   def index
-    @projects = @team.projects
+    @events = @team.events.recent.paginate(:page => params[:page], :per_page => 50)
   end
 
   def new
