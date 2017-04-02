@@ -1,24 +1,15 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Fundamental
 
-Things you may want to cover:
+安装必要的 gems：bootstrap, simple_form, devise
 
-* Ruby version
 
-* System dependencies
 
-* Configuration
+## step1
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- 安装 rspect；
+- project 模型
+  - title
+  - description
+  - user_id
