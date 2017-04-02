@@ -1,0 +1,15 @@
+<h2 class="text-center">新增任务</h2>
+
+<div class="col-md-8 col-md-offset-2">
+  <%= simple_form_for [@project, @todo] do |f| %>
+    <div class="form-group">
+      <%= f.input :title, label: "标题", input_html: {class: "form-control"} %>
+      <%= f.input :description, label: "描述", input_html: {class: "form-control"} %>
+      <%= f.input :due, label: "截止日期", input_html: {class: "form-control"} %>
+      <%= f.input :assign, label: "被指派者", input_html: {class: "form-control"} %>
+    </div>
+    <div class="form-actions">
+      <%= f.submit "Submit", disable_with: "Submitting...", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

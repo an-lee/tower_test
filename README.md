@@ -8,7 +8,7 @@
 
 /teams/:id
 
-## 项目
+### 项目
 
 /projects
 
@@ -61,6 +61,7 @@
   - description
   - due
   - user_id
+  - project_id
   - assign
 - message 模型
   - title
