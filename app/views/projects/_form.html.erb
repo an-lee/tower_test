@@ -1,0 +1,9 @@
+<%= simple_form_for @project do |f| %>
+
+<div class="form-group">
+  <div class="form-group string optional">
+    <%= f.input :title, input_html: {class: "form-control"} %>
+    <%= f.input :description, input_html: {class: "form-control"} %>
+  </div>
+  <%= f.submit "Submit", :disable_with => 'Submiting...' %>
+<% end %>
