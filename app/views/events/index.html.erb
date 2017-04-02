@@ -1,6 +1,10 @@
 <div class="container">
-  <% @events.each do |event| %>
-    <%= event.created_at.strftime("%-d/%-m/%y: %H:%M %Z") %>, <%= event.user.email %> <%= event.action %> <%= event.title %> <br> <%= event.content %>
+  <% @projects.each do |project| %>
+    项目：<%= project.title %> <br>
+    <% project.events.each do |event| %>
+      <%= event.created_at.strftime("%-d/%-m/%y: %H:%M %Z") %>, <%= event.user.email %> <%= event.action %> <%= link_to(event.todo.title, project_todo_path(project, event.todo)) %> <br> <%= event.todo.description %>
+      <br>
+    <% end %>
     <hr>
   <% end %>
 </div>

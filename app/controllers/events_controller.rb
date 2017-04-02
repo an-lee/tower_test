@@ -1,9 +1,9 @@
 class EventsController < ApplicationController
   before_filter :authenticate_user!, :only => [:new, :create]
-  before_action :find_team, :only => [:new, :create, :destroy]
+  before_action :find_team, :only => [:index, :new, :create, :destroy]
 
   def index
-    @events = Event.all
+    @projects = @team.projects
   end
 
   def new

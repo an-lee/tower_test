@@ -18,6 +18,7 @@ class TodosController < ApplicationController
       @event.user = current_user
       @event.project = @project
       @event.team = @project.team
+      @event.todo = @todo
       @event.save!
       redirect_to project_path(@project)
     else
