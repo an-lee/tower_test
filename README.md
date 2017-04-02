@@ -58,6 +58,16 @@
   - project_id
 - todo 模型
   - title
+  - description
   - due
   - user_id
   - assign
+- message 模型
+  - title
+  - content
+  - user_id
+- event 模型
+  - action
+  - title
+  - content
+  - user_id
