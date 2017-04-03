@@ -96,4 +96,5 @@
 ## step4
 
 - user 对 project 的权限
-
+- 增加 user.name
+- 增加 event.category 以区分

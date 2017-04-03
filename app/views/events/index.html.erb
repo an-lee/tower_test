@@ -1,13 +1,5 @@
 <div class="container">
-  <% project = nil %>
-  <% @events.each do |event| %>
-    <% if project != event.project.title %>
-      <hr>
-      <h3 style="text-align:right"> <%= event.project.title %> </h3>
-    <% end %>
-    <%= event.created_at.strftime("%-d/%-m/%y: %H:%M %Z") %>, <%= event.user.email %> <%= event.action %> <%= link_to(event.todo.title, project_todo_path(event.project, event.todo)) %>
-    <br>
-    <%= event.todo.description %>
-    <% project = event.project.title %>
-  <% end %>
+
+  <%= render :partial => "event_item" %>
+
 </div>

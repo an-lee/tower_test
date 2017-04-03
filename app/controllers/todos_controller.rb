@@ -26,22 +26,23 @@ class TodosController < ApplicationController
 
   def assign
     @todo = Todo.find(params[:id])
-    old_assign = User.find_by_id(@todo.assign)
+    old_assign = @todo.assign
     @todo.update(todo_params)
-    new_assign = User.find_by_id(@todo.assign)
-    if old_assign != nil
-      render_create_event("把#{old_assign.email}的任务指派给了#{new_assign.email}", @todo, @project)
-    else
+    if old_assign == nil
       render_create_event("给#{@todo.assign}指派了任务", @todo, @project)
+    elsif old_assign == @todo.assign
+      flash[:alert] = "你把任务指派给了相同的人"
+    else
+      render_create_event("把#{old_assign}的任务指派给了#{@todo.assign}", @todo, @project)
     end
     redirect_to :back
   end
 
   def due
     @todo = Todo.find(params[:id])
-    old_due = @todo.due
+    old_due = @todo.due.strftime('%y-%m-%d')
     @todo.update(todo_params)
-    new_due = @todo.due
+    new_due = @todo.due.strftime('%y-%m-%d')
     if old_due != nil
       render_create_event("把任务的时间由#{old_due}改成了#{new_due}", @todo, @project)
     else
@@ -78,7 +79,7 @@ class TodosController < ApplicationController
     @todo = Todo.find(params[:id])
     @todo.uncomplete!
     @todo.save
-    render_create_event("撤销了任务完成状态", @todo, @project)
+    render_create_event("重新打开了任务", @todo, @project)
     redirect_to :back
   end
 
@@ -94,8 +95,7 @@ class TodosController < ApplicationController
 
   def render_create_event(action, todo, project)
     @event = Event.new(:action => action,
-                       :content => todo.description,
-                       :title => todo.title)
+                       :content => todo.description)
     @event.user = current_user
     @event.project = project
     @event.team = project.team

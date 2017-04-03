@@ -4,7 +4,7 @@ class CreateTodos < ActiveRecord::Migration[5.0]
       t.string :title
       t.text :description
       t.datetime :due
-      t.integer :assign
+      t.string :assign
       t.integer :user_id
       t.integer :project_id
       t.timestamps
