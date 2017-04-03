@@ -1,5 +1,6 @@
 class TeamsController < ApplicationController
-  before_action :authenticate_user! , only: [:new, :create]
+  before_action :authenticate_user!
+  before_action :member_of_team_required , only: [:show]
 
   def index
     @teams = Team.all
@@ -27,6 +28,27 @@ class TeamsController < ApplicationController
     @team = Team.find(params[:id])
     @team.destroy
     redirect_to teams_path, alert: "Team deleted!"
+  end
+
+  def join
+    @team = Team.find(params[:id])
+    if !current_user.is_member_of_team?(@team)
+      current_user.join_team!(@team)
+    else
+      redirect_to :back
+    end
+  end
+
+  def quit
+    @team = Team.find(params[:id])
+    if current_user == @team.user
+      redirect_to :back, alert: "You are the creator!"
+    elsif
+      current_user.is_member_of_team?(@team)
+      current_user.quit_team!(@team)
+    else
+      redirect_to :back
+    end
   end
 
   private

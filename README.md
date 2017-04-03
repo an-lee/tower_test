@@ -93,3 +93,7 @@
   - message_id
   - project_id
 
+## step4
+
+- user 对 project 的权限
+

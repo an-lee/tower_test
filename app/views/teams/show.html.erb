@@ -5,6 +5,11 @@
     <% if current_user && current_user == @team.user %>
       <%= link_to("Edit", edit_team_path(@team), class: "btn btn-primary pull-right") %>
     <% end %>
+    <% if current_user && current_user.is_member_of_team?(@team) %>
+      <%= link_to("退出团队", quit_team_path(@team), class: "btn btn-sm btn-default", method: :post ) %>
+    <% else %>
+      <%= link_to("加入团队", join_team_path(@team), class: "btn btn-sm btn-default", method: :post ) %>
+    <% end %>
   </div>
   <h2><%= @team.title %></h2>
   <p><%= @team.description %></p>

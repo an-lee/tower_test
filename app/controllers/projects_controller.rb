@@ -1,10 +1,10 @@
 class ProjectsController < ApplicationController
-  before_action :authenticate_user! , only: [:new, :create]
+  before_action :authenticate_user!
   before_action :find_project_and_check_permission, only: [:edit, :update, :destroy]
   before_action :find_team, only: [:new, :create, :destroy]
+  before_action :member_of_project_required, only: [:show, :destroy, :edit, :update]
 
   def index
-    @projects = Project.all
   end
 
   def new
@@ -33,7 +33,7 @@ class ProjectsController < ApplicationController
     @project.team = @team
     current_user.join_proj!(@project)
     if @project.save
-      redirect_to team_projects_path(@team), notice: "New Project Created!"
+      redirect_to team_path(@team), notice: "New Project Created!"
     end
   end
 

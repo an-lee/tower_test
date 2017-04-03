@@ -5,6 +5,10 @@ Rails.application.routes.draw do
   resources :teams do
     resources :projects
     resources :events
+    member do
+      post :join
+      post :quit
+    end
   end
 
   resources :projects do
