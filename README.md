@@ -58,6 +58,11 @@
 - access 模型
   - user_id
   - project_id
+
+## step2
+
+基础模型建设
+
 - todo 模型
   - title
   - description
@@ -69,18 +74,22 @@
   - title
   - content
   - user_id
+
+## step3
+
 - event 模型
   - action
     - [+] 创建了任务
     - [+] 删除了任务
     - [+] 完成了任务
     - [+] 恢复了任务
-    - [+]回复了任务
-    - [+]给 xxx 指派了任务
-    - [+]把 xxx 的任务指派给 xxx
+    - [+] 回复了任务
+    - [+] 给 xxx 指派了任务
+    - [+] 把 xxx 的任务指派给 xxx
     - [+]将任务完成时间从 xxx 修改为 xxx
   - user_id
   - team_id
   - todo_id
   - message_id
   - project_id
+
