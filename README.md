@@ -1,5 +1,11 @@
 # README
 
+本网站已部署至：https://tower-test.herokuapp.com/
+
+测试账号： test1@example.com （密码：111111）
+
+
+
 ## 路由设置
 
 ### 团队
@@ -99,3 +105,10 @@
 - 增加 user.name
 - 增加 event.category 以区分显示样式
 - controllers 重构
+
+## step5
+
+- controllers 重构抽取 model 方法
+- model rspec
+- controller rspec
+
