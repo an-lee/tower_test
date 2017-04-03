@@ -42,6 +42,24 @@ class ProjectsController < ApplicationController
     redirect_to team_projects_path(@team), alert: "Project Deleted!"
   end
 
+  def join
+    @project = Project.find(params[:id])
+    if !current_user.is_member_of_proj?(@project)
+      current_user.join_proj!(@project)
+    end
+      redirect_to :back
+  end
+
+  def quit
+    @project = Project.find(params[:id])
+    if current_user == @project.user
+      flash[:alert] = "You are the creator!"
+    elsif current_user.is_member_of_proj?(@project)
+      current_user.quit_proj!(@project)
+    end
+      redirect_to :back
+  end
+
   private
 
   def find_team
@@ -51,7 +69,7 @@ class ProjectsController < ApplicationController
   def find_project_and_check_permission
     @project = Project.find(params[:id])
     if current_user != @project.user
-      redirect_to root_path, alert: "You have no Permission"
+      redirect_to :back, alert: "You have no Permission"
     end
   end
 

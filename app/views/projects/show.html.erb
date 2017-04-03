@@ -23,7 +23,7 @@
     <tbody>
       <% @todos.each do |todo| %>
         <tr>
-          <td><%= todo.user.email %></td>
+          <td><%= todo.user.name %></td>
           <td><%= link_to(todo.title, project_todo_path(@project,todo)) %></td>
           <td><%= todo.description %></td>
           <td>
@@ -31,26 +31,23 @@
               <%= f.input :due  %>
               <%= f.submit "Update", data: {disable_with:"Submitting..."} %>
             <% end %>
-            <%= todo.due %>
           </td>
           <td>
             <%= simple_form_for todo, url: assign_project_todo_path(@project,todo) do |f| %>
-              <%= f.input :assign %>
+              <%= f.input :assign, :class => "form-control" %>
               <%= f.submit "Update", data: {disable_with:"Submitting..."} %>
             <% end %>
-            <%= todo.assign %>
           </td>
           <td>
-            <%= link_to("编辑任务", edit_project_todo_path(@project, todo), class: "btn btn-default btn-sm")%>
             <% if todo.is_trash %>
-              <%= link_to("恢复任务", untrash_project_todo_path(@project,todo), class: "btn btn-default btn-sm", :method => :post) %>
+              <%= link_to("恢复任务", untrash_project_todo_path(@project,todo), class: "btn btn-default btn-sm btn-warning", :method => :post) %>
             <% else %>
-              <%= link_to("删除任务", trash_project_todo_path(@project,todo) ,class: "btn btn-default btn-sm", :method => :post) %>
+              <%= link_to("删除任务", trash_project_todo_path(@project,todo) ,class: "btn btn-default btn-sm btn-danger", :method => :post) %>
             <% end %>
             <% if todo.is_completed %>
-              <%= link_to("撤销完成", uncomplete_project_todo_path(@project,todo) ,class: "btn btn-default btn-sm", :method => :post) %>
+              <%= link_to("重新打开", uncomplete_project_todo_path(@project,todo) ,class: "btn btn-default btn-sm btn-warning", :method => :post) %>
             <% else %>
-              <%= link_to("完成任务", complete_project_todo_path(@project,todo), class: "btn btn-default btn-sm", :method => :post) %>
+              <%= link_to("完成任务", complete_project_todo_path(@project,todo), class: "btn btn-default btn-sm btn-success", :method => :post) %>
             <% end %>
           </td>
         </tr>

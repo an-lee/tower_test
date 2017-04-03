@@ -2,7 +2,7 @@
   <td>#</td>
   <td><%= link_to(project.title, project_path(project)) %></td>
   <td><%= render_project_description(project) %></td>
-  <td><%= project.user.email %></td>
+  <td><%= project.user.name %></td>
   <td>
     <% if current_user && current_user == project.user %>
       <%= link_to("Edit", edit_project_path(project), class: "btn btn-sm btn-default") %>

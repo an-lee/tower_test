@@ -12,6 +12,10 @@ Rails.application.routes.draw do
   end
 
   resources :projects do
+    member do
+      post :join
+      post :quit
+    end
     resources :todos do
       member do
         post :trash

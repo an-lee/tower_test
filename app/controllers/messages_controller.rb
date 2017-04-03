@@ -1,8 +1,8 @@
 class MessagesController < ApplicationController
+  before_action :authenticate_user!
+  before_action :find_project_and_todo
 
   def create
-    @project = Project.find(params[:project_id])
-    @todo = Todo.find(params[:todo_id])
     @message = Message.new(message_params)
     @message.todo = @todo
     @message.user = current_user
@@ -13,12 +13,15 @@ class MessagesController < ApplicationController
   end
 
   def new
-    @project = Project.find(params[:project_id])
-    @todo = Todo.find(params[:todo_id])
     @message = Message.new
   end
 
   private
+
+  def find_project_and_todo
+    @project = Project.find(params[:project_id])
+    @todo = Todo.find(params[:todo_id])
+  end
 
   def message_params
     params.require(:message).permit(:title, :content)

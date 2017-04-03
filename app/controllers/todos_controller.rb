@@ -1,13 +1,13 @@
 class TodosController < ApplicationController
-  before_filter :authenticate_user!, :only => [:new, :create]
-  before_action :find_project, :only => [:new, :show, :create, :edit, :update, :destroy, :untrash, :trash, :complete, :uncomplete, :assign, :due]
+  before_filter :authenticate_user!
+  before_action :find_project
+  before_action :find_todo, :only => [:show, :assign, :due, :trash, :untrash, :complete, :uncomplete]
 
   def new
     @todo = Todo.new
   end
 
   def show
-    @todo = Todo.find(params[:id])
     @messages = @todo.messages
   end
 
@@ -25,7 +25,6 @@ class TodosController < ApplicationController
   end
 
   def assign
-    @todo = Todo.find(params[:id])
     old_assign = @todo.assign
     @todo.update(todo_params)
     if old_assign == nil
@@ -39,20 +38,19 @@ class TodosController < ApplicationController
   end
 
   def due
-    @todo = Todo.find(params[:id])
-    old_due = @todo.due.strftime('%y-%m-%d')
+    old_due = @todo.due
     @todo.update(todo_params)
-    new_due = @todo.due.strftime('%y-%m-%d')
-    if old_due != nil
-      render_create_event("把任务的时间由#{old_due}改成了#{new_due}", @todo, @project)
+    if old_due == nil
+      render_create_event("为任务设置了截止时间#{@todo.due}", @todo, @project)
+    elsif old_due == @todo.due
+      flash[:alert] = "你为任务设置的相同的截止时间"
     else
-      render_create_event("为任务设置了截止时间#{new_due}", @todo, @project)
+      render_create_event("把任务的时间由#{old_due}改成了#{@todo.due}", @todo, @project)
     end
     redirect_to :back
   end
 
   def untrash
-    @todo = Todo.find(params[:id])
     @todo.untrash!
     @todo.save
     render_create_event("恢复了任务", @todo, @project)
@@ -60,7 +58,6 @@ class TodosController < ApplicationController
   end
 
   def trash
-    @todo = Todo.find(params[:id])
     @todo.trash!
     @todo.save
     render_create_event("删除了任务", @todo, @project)
@@ -68,7 +65,6 @@ class TodosController < ApplicationController
   end
 
   def complete
-    @todo = Todo.find(params[:id])
     @todo.complete!
     @todo.save
     render_create_event("完成了任务", @todo, @project)
@@ -76,7 +72,6 @@ class TodosController < ApplicationController
   end
 
   def uncomplete
-    @todo = Todo.find(params[:id])
     @todo.uncomplete!
     @todo.save
     render_create_event("重新打开了任务", @todo, @project)
@@ -87,6 +82,10 @@ class TodosController < ApplicationController
 
   def find_project
     @project = Project.find(params[:project_id])
+  end
+
+  def find_todo
+    @todo = Todo.find(params[:id])
   end
 
   def todo_params

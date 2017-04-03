@@ -2,14 +2,17 @@
   <div class="group">
 
     <%= link_to("创建新项目", new_team_project_path(@team), class:"btn btn-default pull-right") %>
+
     <% if current_user && current_user == @team.user %>
-      <%= link_to("Edit", edit_team_path(@team), class: "btn btn-primary pull-right") %>
+      <%= link_to("编辑团队", edit_team_path(@team), class: "btn btn-primary pull-right") %>
     <% end %>
+
     <% if current_user && current_user.is_member_of_team?(@team) %>
-      <%= link_to("退出团队", quit_team_path(@team), class: "btn btn-sm btn-default", method: :post ) %>
-    <% else %>
-      <%= link_to("加入团队", join_team_path(@team), class: "btn btn-sm btn-default", method: :post ) %>
+      <%= link_to("退出团队", quit_team_path(@team), class: "btn btn-danger pull-right", method: :post ) %>
     <% end %>
+
+    <%= link_to("查看动态", team_events_path(@team) ,class: "btn btn-warning pull-right") %>
+
   </div>
   <h2><%= @team.title %></h2>
   <p><%= @team.description %></p>
@@ -28,7 +31,14 @@
           <td><%= link_to(project.title, project_path(project)) %></td>
           <td><%= project.description %></td>
           <td><%= project.user.email %></td>
-          <td><%= link_to("编辑项目", edit_team_project_path(@team, project), class: "btn btn-default btn-sm")%></td>
+          <td>
+            <%= link_to("编辑项目", edit_team_project_path(@team, project), class: "btn btn-default btn-sm")%>
+            <% if current_user && current_user.is_member_of_proj?(project) %>
+              <%= link_to("退出项目", quit_project_path(project), class: "btn btn-sm btn-danger", method: :post ) %>
+            <% else %>
+              <%= link_to("加入项目", join_project_path(project), class: "btn btn-sm btn-default", method: :post ) %>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>
