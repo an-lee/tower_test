@@ -7,15 +7,9 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 # create_admin_account = User.create([email: 'admin@testmail.com', password: '111111', password_confirmation: '111111', is_admin: 'true'])
 # puts "Admin account created."
-create_normal_account = User.create([email: 'test1@example.com', password: '111111', password_confirmation: '111111', name: "Mike"])
+account_1 = User.create([email: 'test1@example.com', password: '111111', password_confirmation: '111111', name: "Mike"])
 puts "Mike created."
-create_normal_account = User.create([email: 'test2@example.com', password: '111111', password_confirmation: '111111', name: "Jack"])
+account_2 = User.create([email: 'test2@example.com', password: '111111', password_confirmation: '111111', name: "Jack"])
 puts "Jack created."
-create_normal_account = User.create([email: 'test3@example.com', password: '111111', password_confirmation: '111111', name: "Tom"])
+account_3 = User.create([email: 'test3@example.com', password: '111111', password_confirmation: '111111', name: "Tom"])
 puts "Tom created."
-create_normal_account = User.create([email: 'test4@example.com', password: '111111', password_confirmation: '111111', name: "Jim"])
-puts "Jim created."
-create_normal_account = User.create([email: 'test5@example.com', password: '111111', password_confirmation: '111111', name: "Helen"])
-puts "Helen created."
-create_normal_account = User.create([email: 'test6@example.com', password: '111111', password_confirmation: '111111', name: "Jaden"])
-puts "Jaden created."
