@@ -8,7 +8,7 @@ class MessagesController < ApplicationController
     @message.todo = @todo
     @message.project = @project
     @message.user = current_user
-
+    
     if @message.save
       redirect_to project_todo_path(@project, @todo)
     else

@@ -22,8 +22,9 @@ class Event < ApplicationRecord
     @event.user = user
     @event.todo = todo
     @event.project = todo.project
-    @event.team = @event.project.team
+    @event.team = todo.team
     @event.category = category
+    # byebug
     @event.save!
   end
 
