@@ -111,4 +111,3 @@
 - controllers 重构抽取 model 方法
 - model rspec
 - controller rspec
-

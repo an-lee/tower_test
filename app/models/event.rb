@@ -5,24 +5,37 @@ class Event < ApplicationRecord
   belongs_to :todo
   scope :recent, -> {order("created_at DESC")}
 
-  def self.build(user, action, todo, project)
+# 创建一般的任务 event
+  def self.build_todo(user, action, todo, project, team)
     @event = Event.new(:action => action)
     @event.user = user
     @event.project = project
-    @event.team = project.team
+    @event.team = team
     @event.todo = todo
     @event.save!
   end
 
-  def self.build1(user, action, todo, project, message, category)
+# 创建任务下的评论 event
+  def self.build_todo_message(user, action, todo, content, category)
     @event = Event.new(:action => action,
-                       :content => message.content)
+                       :content => content)
     @event.user = user
-    @event.project = project
-    @event.team = project.team
     @event.todo = todo
+    @event.project = todo.project
+    @event.team = @event.project.team
     @event.category = category
     @event.save!
   end
+
+  # 创建项目下的评论 event
+    def self.build_proj_message(user, action, message, category)
+      @event = Event.new(:action => action,
+                         :content => message.content)
+      @event.user = user
+      @event.project = project
+      @event.team = project.team
+      @event.category = category
+      @event.save!
+    end
 
 end

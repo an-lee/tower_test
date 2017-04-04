@@ -3,15 +3,18 @@ class MessagesController < ApplicationController
   before_action :find_project_and_todo
 
   def create
-    
+
     @message = Message.new(message_params)
     @message.todo = @todo
+    @message.project = @project
     @message.user = current_user
 
     if @message.save
-      Event.build1(current_user, "回复了任务", @todo, @project, @message, 1)
       redirect_to project_todo_path(@project, @todo)
+    else
+      render :new
     end
+
   end
 
   def new
