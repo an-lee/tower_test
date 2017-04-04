@@ -2,8 +2,8 @@ class Event < ApplicationRecord
   belongs_to :user
   belongs_to :team
   belongs_to :project
-  belongs_to :todo
-  scope :recent, -> {order("created_at DESC")}
+  belongs_to :todo, optional: true
+  scope :recent, -> {order("id DESC")}
 
 # 创建一般的任务 event
   def self.build_todo(user, action, todo, project, team)
@@ -29,14 +29,15 @@ class Event < ApplicationRecord
   end
 
   # 创建项目下的评论 event
-    def self.build_proj_message(user, action, message, category)
-      @event = Event.new(:action => action,
-                         :content => message.content)
-      @event.user = user
-      @event.project = project
-      @event.team = project.team
-      @event.category = category
-      @event.save!
-    end
+  def self.build_proj_message(user, action, project, content, category)
+    @event = Event.new(:action => action,
+                       :content => content)
+    @event.user = user
+    @event.project = project
+    # byebug
+    @event.team = project.team
+    @event.category = category
+    @event.save!
+  end
 
 end

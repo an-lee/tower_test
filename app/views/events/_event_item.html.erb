@@ -3,6 +3,7 @@
 <% @events.each do |event| %>
 
   <% if date != event.created_at.strftime('%y-%m-%d').to_s %>
+    <hr>
     <h4><%= event.created_at.strftime('%y-%m-%d') %></h4>
     <hr>
   <% end %>

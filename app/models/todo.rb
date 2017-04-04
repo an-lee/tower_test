@@ -55,10 +55,10 @@ class Todo < ApplicationRecord
       Event.build_todo(self.user, "把 #{self.assign_was} 的任务指派给了 #{self.assign}", self, self.project, self.team)
     # 设定截止时间触发 event
     elsif self.due_changed? && self.due_was == nil
-      Event.build_todo(self.user, "为任务设置了截止时间为 #{self.due}", self, self.project, self.team)
+      Event.build_todo(self.user, "将任务完成时间从 没有截止日期 修改为 #{self.due}", self, self.project, self.team)
     # 重新设定截止时间触发 event
     elsif self.due_changed? && self.due_was != nil
-      Event.build_todo(self.user, "把任务的截止时间由 #{self.due_was} 改成了 #{self.due}", self, self.project, self.team)
+      Event.build_todo(self.user, "将任务完成时间从 #{self.due_was} 修改为 #{self.due}", self, self.project, self.team)
     end
   end
 

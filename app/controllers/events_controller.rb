@@ -10,12 +10,6 @@ class EventsController < ApplicationController
     end
   end
 
-  def new
-  end
-
-  def create
-  end
-
   private
 
   def event_params

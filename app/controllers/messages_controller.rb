@@ -8,9 +8,13 @@ class MessagesController < ApplicationController
     @message.todo = @todo
     @message.project = @project
     @message.user = current_user
-    
+
     if @message.save
-      redirect_to project_todo_path(@project, @todo)
+      if @todo != nil
+        redirect_to project_todo_path(@project, @todo)
+      else
+        redirect_to project_path(@project)
+      end
     else
       render :new
     end
@@ -25,7 +29,9 @@ class MessagesController < ApplicationController
 
   def find_project_and_todo
     @project = Project.find(params[:project_id])
-    @todo = Todo.find(params[:todo_id])
+    if Todo.find_by_id(params[:todo_id])
+      @todo = Todo.find(params[:todo_id])
+    end
   end
 
   def message_params

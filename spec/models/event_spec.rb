@@ -52,7 +52,7 @@ RSpec.describe Event, type: :model do
       it "should create an event when set due date" do
         @todo.update(:due => @t)
         event = Event.last
-        expect(event.action).to eq("为任务设置了截止时间为 #{@t.to_s}")
+        expect(event.action).to eq("将任务完成时间从 没有截止日期 修改为 #{@t.to_s}")
       end
 
       it "should create an event when reset due date" do
@@ -60,7 +60,7 @@ RSpec.describe Event, type: :model do
         @todo.update(:due => @t.tomorrow)
         event = Event.last
         # byebug
-        expect(event.action).to eq("把任务的截止时间由 #{@t.to_s} 改成了 #{@t.tomorrow.to_s}")
+        expect(event.action).to eq("将任务完成时间从 #{@t.to_s} 修改为 #{@t.tomorrow.to_s}")
       end
 
       it "should create an event when trash a todo" do
@@ -104,7 +104,7 @@ RSpec.describe Event, type: :model do
     before do
       @user = User.create(:email => "test1@example.com", :password => "111111")
       @team = Team.create(:title => "Team_1", :user => @user)
-      @project = Project.create(:title => "Project_1", :user=> @user)
+      @project = Project.create(:title => "Project_1", :team => @team, :user=> @user)
       @todo = Todo.create(:title => "Todo_1", :user => @user, :team => @team, :project => @project)
     end
 
@@ -124,9 +124,20 @@ RSpec.describe Event, type: :model do
       end
 
     end
-    
+
 # ---------------
-    context 'when todo_message created' do
+    context 'when project_message created' do
+
+      it 'should create an event' do
+        @message = Message.create(:content => "这个项目不错",
+                                  :user => @user,
+                                  :project => @project)
+        @message.save!
+        # byebug
+        event = Event.last
+        expect(event.action).to eq("创建了讨论")
+        expect(event.content).to eq(@message.content)
+      end
 
     end
 
