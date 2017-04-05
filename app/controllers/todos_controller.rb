@@ -36,6 +36,7 @@ class TodosController < ApplicationController
 
   def due
     @todo.update(todo_params)
+    # byebug
     redirect_to :back
   end
 
@@ -72,7 +73,7 @@ class TodosController < ApplicationController
   end
 
   def todo_params
-    params.require(:todo).permit(:title, :description)
+    params.require(:todo).permit(:title, :description, :assign, :due)
   end
 
 end
