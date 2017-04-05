@@ -1,0 +1,33 @@
+<% project = nil %>
+<% date = nil %>
+<% @events.each do |event| %>
+
+  <% if date != event.created_at.strftime('%y-%m-%d').to_s %>
+    <hr>
+    <h4><%= event.created_at.strftime('%y-%m-%d') %></h4>
+    <hr>
+  <% end %>
+  <% if project != event.project.title %>
+    <h4 style="text-align:right"> <%= event.project.title %> </h4>
+    -------------<br>
+  <% end %>
+
+  <%= event.created_at.strftime("%I:%M %p") %>,
+  <span style="font-size:1.5em"><%= event.user.name %></span>
+  <b><%= event.action %> : </b>
+
+  <% case event.category %>
+    <% when 0 %>
+    <!-- 适合创建、删除、完成、恢复、指派、修改截止日期等指令的状态 -->
+      <%= link_to(event.todo.title, project_todo_path(event.project, event.todo)) %>
+      <% project = event.project.title %>
+      <% date = event.created_at.strftime('%y-%m-%d').to_s %>
+      <br>
+    <% when 1 %>
+    <!-- 适合添加评论的指令状态 -->
+      <%= link_to(event.todo.title, project_todo_path(event.project, event.todo)) %>
+      <p><%= link_to(event.content, project_todo_path(event.project, event.todo)) %></p>
+      <% project = event.project.title %>
+      <% date = event.created_at.strftime('%y-%m-%d').to_s %>
+  <% end %>
+<% end %>

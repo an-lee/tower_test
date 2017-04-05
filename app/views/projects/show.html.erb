@@ -1,0 +1,58 @@
+<div class="col-md-12">
+  <div class="group">
+
+    <%= link_to("创建新任务", new_project_todo_path(@project), class:"btn btn-default pull-right") %>
+    <% if current_user && current_user == @project.user %>
+      <%= link_to("Edit", edit_project_path(@project), class: "btn btn-primary pull-right") %>
+    <% end %>
+  </div>
+  <h2><%= @project.title %></h2>
+  <p><%= @project.description %></p>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>任务创建者</th>
+        <th>任务名称</th>
+        <th>任务描述</th>
+        <th>截止日期</th>
+        <th>完成者</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @todos.each do |todo| %>
+        <tr>
+          <td><%= todo.user.name %></td>
+          <td><%= link_to(todo.title, project_todo_path(@project,todo)) %></td>
+          <td><%= todo.description %></td>
+          <td>
+            <%= simple_form_for todo, url: due_project_todo_path(@project,todo) do |f| %>
+              <%= f.input :due  %>
+              <%= f.submit "Update", data: {disable_with:"Submitting..."} %>
+            <% end %>
+          </td>
+          <td>
+            <%= simple_form_for todo, url: assign_project_todo_path(@project,todo) do |f| %>
+              <%= f.input :assign, :class => "form-control" %>
+              <%= f.submit "Update", data: {disable_with:"Submitting..."} %>
+            <% end %>
+          </td>
+          <td>
+            <% if todo.is_trash %>
+              <%= link_to("恢复任务", untrash_project_todo_path(@project,todo), class: "btn btn-default btn-sm btn-warning", :method => :post) %>
+            <% else %>
+              <%= link_to("删除任务", trash_project_todo_path(@project,todo) ,class: "btn btn-default btn-sm btn-danger", :method => :post) %>
+            <% end %>
+            <% if todo.is_completed %>
+              <%= link_to("重新打开", uncomplete_project_todo_path(@project,todo) ,class: "btn btn-default btn-sm btn-warning", :method => :post) %>
+            <% else %>
+              <%= link_to("完成任务", complete_project_todo_path(@project,todo), class: "btn btn-default btn-sm btn-success", :method => :post) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+</table>
+
+</div>

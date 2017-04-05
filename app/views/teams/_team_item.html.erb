@@ -1,0 +1,17 @@
+<tr>
+  <td>#</td>
+  <td><%= link_to(team.title, team_path(team)) %></td>
+  <td><%= render_team_description(team) %></td>
+  <td><%= team.user.name %></td>
+  <td>
+    <% if current_user && current_user == team.user %>
+      <%= link_to("删除", team_path(team), class: "btn btn-sm btn-default", method: :delete, data: {confirm: "Are you sure?"}) %>
+    <% end %>
+    <% if current_user && current_user.is_member_of_team?(team) %>
+      <%= link_to("查看动态", team_events_path(team) ,class: "btn btn-sm btn-warning") %>
+      <%= link_to("退出团队", quit_team_path(team), class: "btn btn-sm btn-danger", method: :post ) %>
+    <% else %>
+      <%= link_to("加入团队", join_team_path(team), class: "btn btn-sm btn-default", method: :post ) %>
+    <% end %>
+  </td>
+</tr>
