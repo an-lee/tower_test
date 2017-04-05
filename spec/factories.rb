@@ -12,6 +12,6 @@ FactoryGirl.define do
   factory :team do
     title
     description "Description"
-    association :user, factory: :user
+    user
   end
 end

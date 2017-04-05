@@ -1,5 +1,5 @@
 class TeamsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, only: [:create, :new, :show, :edit, :update, :destroy, :join, :quit]
   before_action :member_of_team_required , only: [:show]
 
   def index
@@ -18,14 +18,30 @@ class TeamsController < ApplicationController
   def create
     @team = Team.new(team_params)
     @team.user = current_user
-    current_user.join_team!(@team)
     if @team.save
+      @team.user.join_team!(@team)
       redirect_to teams_path, notice: "New team Created!"
+    else
+      render :new
+    end
+  end
+
+  def edit
+    @team = current_user.teams.find(params[:id])
+  end
+
+  def update
+    @team = current_user.teams.find(params[:id])
+    @team.update(team_params)
+    if @team.save
+      redirect_to team_path(@team), notice: "team Updated!"
+    else
+      render :edit
     end
   end
 
   def destroy
-    @team = Team.find(params[:id])
+    @team = current_user.teams.find(params[:id])
     @team.destroy
     redirect_to teams_path, alert: "Team deleted!"
   end
@@ -35,7 +51,7 @@ class TeamsController < ApplicationController
     if !current_user.is_member_of_team?(@team)
       current_user.join_team!(@team)
     end
-      redirect_to :back
+      redirect_to team_path(@team)
   end
 
   def quit
@@ -45,7 +61,7 @@ class TeamsController < ApplicationController
     elsif current_user.is_member_of_team?(@team)
       current_user.quit_team!(@team)
     end
-    redirect_to :back
+    redirect_to team_path(@team)
   end
 
   private
