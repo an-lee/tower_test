@@ -33,10 +33,10 @@
           <td><%= project.user.name %></td>
           <td>
             <%= link_to("编辑项目", edit_team_project_path(@team, project), class: "btn btn-default btn-sm")%>
-            <% if current_user && current_user.is_member_of_proj?(project) %>
-              <%= link_to("退出项目", quit_project_path(project), class: "btn btn-sm btn-danger", method: :post ) %>
+            <% if current_user && current_user.is_member_of_project?(project) %>
+              <%= link_to("退出项目", quit_team_project_path(@team, project), class: "btn btn-sm btn-danger", method: :post ) %>
             <% else %>
-              <%= link_to("加入项目", join_project_path(project), class: "btn btn-sm btn-default", method: :post ) %>
+              <%= link_to("加入项目", join_team_project_path(@team, project), class: "btn btn-sm btn-default", method: :post ) %>
             <% end %>
           </td>
         </tr>

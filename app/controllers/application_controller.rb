@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   def member_of_project_required
     @user = current_user
     @project = Project.find(params[:id])
-    if !@user.is_member_of_proj?(@project)
+    if !@user.is_member_of_project?(@project)
       redirect_to root_path, alert: "You are not member of the project!"
     end
   end

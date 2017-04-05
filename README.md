@@ -2,9 +2,146 @@
 
 本网站已部署至：https://tower-test.herokuapp.com/
 
-测试账号： test1@example.com （密码：111111）
+测试账号1： test1@example.com （密码：111111）
 
+测试账号2： test2@example.com （密码：111111）
 
+测试账号3： test3@example.com （密码：111111）
+
+## Model Rspec
+
+### User Model (√)
+
+- has_many teams
+- has_many projects
+- has_many todos
+- has_many messages
+- has_many events
+- has_many participated_teams
+- has_many participated_projects
+
+### Team Model (√)
+
+- 必须要有 title
+- belongs_to user
+- has_many projects
+- has_many todos
+- has_many events
+- has_many team_relationship
+- has_many members
+
+### Project Model (√)
+
+- 必须要有 title
+- belongs_to user
+- belongs_to team
+- has_many todos
+- has_many events
+- has_many messages
+- has_many accesses
+- has_many members
+
+### Todo Model (√)
+
+- 必须要有 title
+- belongs_to user
+- belongs_to team
+- belongs_to project
+- has_many messages
+- has_many events
+
+### Message Model (√)
+
+- 必须要有 content
+- belongs_to user
+- belongs_to todo
+- belongs_to project
+
+### Event Model (√)
+
+- belongs_to user
+- belongs_to todo
+- belongs_to project
+- belongs_to team
+- 新建 todo 时生成一条 event
+  - action = "创建了任务"
+- todo 的 assign 栏位更新时，生成一条 event
+  - action = "给 #{assign} 指派了任务"
+  - action = "把 #{old_assign} 的任务指派给了 #{new_assign}"
+- todo 的 due 栏位更新时，生成一条 event
+  - action = "将任务完成时间从 没有截止日期 修改为 #{due}"
+  - action = "将任务完成时间从 #{old_due} 修改为 #{new_due}"
+- 删除 todo 时（栏位 is_trash => "true"），新建一条 event
+  - action = "删除了任务"
+- 恢复 todo 时（栏位 is_trash => "false"），新建一条 event
+  - action = "恢复了任务"
+- 完成 todo 时（栏位 is_completed => "true"），新建一条 event
+  - action = "完成了任务"
+- 重新打开 todo 时（栏位 is_completed => "false"），新建一条 event
+  - action = "重新打开了任务"
+
+## Controller Rspec
+
+### Team Controller (√)
+
+- 登入才可以访问 #index
+- 登入才可以新建团队 #new
+- 新建团队自动成为该[团队成员] #create
+- 团队必须要名字 #create / #update
+- 加入团队才可以访问团队页面 #show
+- [团队创建者]才可以编辑团队 #edit / #update
+- [团队创建者]才可以删除团队 #destroy
+- [非团队成员]可以加入团队 #join
+- [团队成员]可以退出团队 #quit
+
+### Project Controller
+
+- 登入且是**[团队成员]**才可以新建项目 #new
+- 新建项目组自动成为该[项目组成员] #create
+- 项目必须要有名字 #create / # update
+- [项目组成员]才可以访问项目页面 #show
+- **如果[团队管理员]非[项目组成员]，也不可访问项目页面** #show
+- [项目管理者]才可以编辑项目 #edit / #update
+- [项目管理者]才可以删除项目 #destroy
+- [团队成员]才可以加入项目组 #join
+- [项目组成员]才可以退出项目组 #quit
+
+### Todo Controller
+
+- [项目组成员]才可以新建任务 #new
+  - 触发 event
+- 任务必须要有名字 #create / # update
+- [项目组成员]才可以访问任务页面 #index
+- [项目组成员]才可以编辑任务 #edit
+  - 触发 event
+- [项目管理员/任务创建者]才可以删除任务 #destroy
+  - 触发 event
+- [项目成员]才可以指派任务 #assign
+  - 触发 event
+- [项目成员]才可以设定任务完成时间 #due
+  - 触发 event
+- [项目成员]才可以标记完成状态 #complete / #uncomplete
+  - 触发 event
+- [项目管理员/任务创建者]才可以删除任务 #trash
+  - 触发 event
+- [项目管理员/任务创建者]才可以恢复任务 #untrash
+  - 触发 event
+
+### Message Controller
+
+- [项目组成员]才可以新建评论 #new / #create
+- 评论必须要有内容 #create / #update
+- [项目管理员/评论作者]才可以删除评论 #destroy
+- [评论作者]才可以编辑评论 #edit
+- 评论分两类，归属于不同的页面
+  - 任务级评论
+  - 项目级讨论
+
+### Event Controller
+
+- 团队成员才可以访问动态
+- 团队管理者可以看到团队内的所有动态
+- 非管理者只能看到自己参与项目的动态
 
 ## 路由设置
 
@@ -41,73 +178,3 @@
 ### 动态
 
 /teams/:team_id/events
-
-
-
-## Fundamental
-
-安装必要的 gems：bootstrap, simple_form, devise
-
-
-
-## step1
-
-- 安装 rspect；
-- project 模型
-  - title
-  - description
-  - user_id
-- team 模型
-  - title
-  - description
-  - user_id
-- access 模型
-  - user_id
-  - project_id
-
-## step2
-
-基础模型建设
-
-- todo 模型
-  - title
-  - description
-  - due
-  - user_id
-  - project_id
-  - assign
-- message 模型
-  - title
-  - content
-  - user_id
-
-## step3
-
-- event 模型
-  - action
-    - [+] 创建了任务
-    - [+] 删除了任务
-    - [+] 完成了任务
-    - [+] 恢复了任务
-    - [+] 回复了任务
-    - [+] 给 xxx 指派了任务
-    - [+] 把 xxx 的任务指派给 xxx
-    - [+]将任务完成时间从 xxx 修改为 xxx
-  - user_id
-  - team_id
-  - todo_id
-  - message_id
-  - project_id
-
-## step4
-
-- user 对 project 的权限
-- 增加 user.name
-- 增加 event.category 以区分显示样式
-- controllers 重构
-
-## step5
-
-- controllers 重构抽取 model 方法
-- model rspec
-- controller rspec

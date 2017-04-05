@@ -14,15 +14,15 @@ class User < ApplicationRecord
   has_many :participated_projects, :through => :accesses, :source => :project
   has_many :participated_teams, :through => :team_relationships, :source => :team
 
-  def is_member_of_proj?(project)
+  def is_member_of_project?(project)
     participated_projects.include?(project)
   end
 
-  def join_proj!(project)
+  def join_project!(project)
     participated_projects << project
   end
 
-  def quit_proj!(project)
+  def quit_project!(project)
     participated_projects.delete(project)
   end
 

@@ -9,4 +9,5 @@ RSpec.describe Project, type: :model do
   it { is_expected.to have_many(:events)}
   it { is_expected.to have_many(:accesses)}
   it { is_expected.to have_many(:members)}
+  it { is_expected.to have_many(:messages)}
 end

@@ -14,4 +14,12 @@ FactoryGirl.define do
     description "Description"
     user
   end
+
+  factory :project do
+    title
+    description "project description"
+    user
+    team
+  end
+
 end

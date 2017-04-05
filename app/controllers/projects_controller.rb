@@ -1,18 +1,15 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_project_and_check_permission, only: [:edit, :update, :destroy]
-  before_action :find_team, only: [:new, :create, :destroy]
-  before_action :member_of_project_required, only: [:show, :destroy, :edit, :update]
-
-  def index
-  end
+  before_action :find_team, only: [:new, :create, :join, :quit]
+  before_action :member_of_project_required, only: [:show, :quit]
 
   def new
     @project = Project.new
   end
 
   def show
-    @project = Project.find(params[:id])
+    @project = current_user.participated_projects.find(params[:id])
     @todos = @project.todos
   end
 
@@ -31,46 +28,44 @@ class ProjectsController < ApplicationController
     @project = Project.new(project_params)
     @project.user = current_user
     @project.team = @team
-    current_user.join_proj!(@project)
     if @project.save
-      redirect_to team_path(@team), notice: "New Project Created!"
+      current_user.join_project!(@project)
+      redirect_to project_path( @project), notice: "New Project Created!"
     end
   end
 
   def destroy
+    @team = @project.team
     @project.destroy
     redirect_to team_projects_path(@team), alert: "Project Deleted!"
   end
 
   def join
     @project = Project.find(params[:id])
-    if !current_user.is_member_of_proj?(@project)
-      current_user.join_proj!(@project)
+    if !current_user.is_member_of_project?(@project)
+      current_user.join_project!(@project)
     end
-      redirect_to :back
+    redirect_to project_path(@project)
   end
 
   def quit
     @project = Project.find(params[:id])
     if current_user == @project.user
       flash[:alert] = "You are the creator!"
-    elsif current_user.is_member_of_proj?(@project)
-      current_user.quit_proj!(@project)
+    else
+      current_user.quit_project!(@project)
     end
-      redirect_to :back
+    redirect_to team_projects_path(@team)
   end
 
   private
 
   def find_team
-    @team = Team.find(params[:team_id])
+    @team = current_user.participated_teams.find(params[:team_id])
   end
 
   def find_project_and_check_permission
-    @project = Project.find(params[:id])
-    if current_user != @project.user
-      redirect_to :back, alert: "You have no Permission"
-    end
+    @project = current_user.projects.find(params[:id])
   end
 
   def project_params
