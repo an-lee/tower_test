@@ -28,7 +28,7 @@ class MessagesController < ApplicationController
   private
 
   def find_project_and_todo
-    @project = Project.find(params[:project_id])
+    @project = current_user.participated_projects.find(params[:project_id])
     if Todo.find_by_id(params[:todo_id])
       @todo = Todo.find(params[:todo_id])
     end

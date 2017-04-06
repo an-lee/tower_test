@@ -10,16 +10,38 @@ FactoryGirl.define do
   end
 
   factory :team do
-    title
+    title "team title"
     description "Description"
     user
   end
 
   factory :project do
-    title
+    title "project titel"
     description "project description"
     user
     team
+  end
+
+  factory :todo do
+    title "todo title"
+    description "todo description"
+    user
+    team
+    project
+  end
+
+  factory :message do
+    content "message content"
+    user
+    project
+    todo
+  end
+
+  factory :event do
+    action "event action"
+    user
+    team
+    project
   end
 
 end

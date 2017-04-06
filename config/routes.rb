@@ -3,21 +3,25 @@ Rails.application.routes.draw do
   root 'teams#index'
 
   resources :teams do
+
+    member do
+      post :join
+      post :quit
+    end
+
+    resources :events, only: [:index]
+
     resources :projects do
       member do
         post :join
         post :quit
       end
     end
-    resources :events
-    member do
-      post :join
-      post :quit
-    end
+
   end
 
   resources :projects do
-    resources :todos do
+    resources :todos, only: [:new, :create, :edit, :update, :destroy, :show] do
       member do
         post :trash
         post :untrash
@@ -26,7 +30,7 @@ Rails.application.routes.draw do
         patch :assign
         patch :due
       end
-    resources :messages
+    resources :messages, only: [:create, :new]
     end
   end
 

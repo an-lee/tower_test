@@ -2,15 +2,24 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_project_and_check_permission, only: [:edit, :update, :destroy]
   before_action :find_team, only: [:new, :create, :join, :quit]
-  before_action :member_of_project_required, only: [:show, :quit]
+  # before_action :member_of_project_required, only: [:show, :quit]
 
   def new
     @project = Project.new
   end
 
+  def index
+    @team = current_user.participated_teams.find(params[:team_id])
+    @projects = @team.projects
+  end
+
   def show
-    @project = current_user.participated_projects.find(params[:id])
-    @todos = @project.todos
+    if current_user.participated_projects.find_by(id: params[:id])
+      @project = current_user.participated_projects.find(params[:id])
+      @todos = @project.todos
+    else
+      redirect_to root_path, alert: "You are member of the project"
+    end
   end
 
   def edit
@@ -30,7 +39,9 @@ class ProjectsController < ApplicationController
     @project.team = @team
     if @project.save
       current_user.join_project!(@project)
-      redirect_to project_path( @project), notice: "New Project Created!"
+      redirect_to team_projects_path(@team), notice: "New Project Created!"
+    else
+      render :new
     end
   end
 
@@ -49,7 +60,7 @@ class ProjectsController < ApplicationController
   end
 
   def quit
-    @project = Project.find(params[:id])
+    @project = current_user.participated_projects.find(params[:id])
     if current_user == @project.user
       flash[:alert] = "You are the creator!"
     else

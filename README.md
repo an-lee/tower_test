@@ -10,7 +10,7 @@
 
 ## Model Rspec
 
-### User Model (√)
+### User Model
 
 - has_many teams
 - has_many projects
@@ -20,7 +20,7 @@
 - has_many participated_teams
 - has_many participated_projects
 
-### Team Model (√)
+### Team Model
 
 - 必须要有 title
 - belongs_to user
@@ -30,7 +30,7 @@
 - has_many team_relationship
 - has_many members
 
-### Project Model (√)
+### Project Model 
 
 - 必须要有 title
 - belongs_to user
@@ -41,7 +41,7 @@
 - has_many accesses
 - has_many members
 
-### Todo Model (√)
+### Todo Model
 
 - 必须要有 title
 - belongs_to user
@@ -50,15 +50,16 @@
 - has_many messages
 - has_many events
 
-### Message Model (√)
+### Message Model 
 
 - 必须要有 content
 - belongs_to user
 - belongs_to todo
 - belongs_to project
 
-### Event Model (√)
+### Event Model 
 
+- 必须要有 content
 - belongs_to user
 - belongs_to todo
 - belongs_to project
@@ -82,7 +83,7 @@
 
 ## Controller Rspec
 
-### Team Controller (√)
+### Team Controller
 
 - 登入才可以访问 #index
 - 登入才可以新建团队 #new
@@ -108,10 +109,11 @@
 
 ### Todo Controller
 
+- 任务必须要有名字 #create / #update
 - [项目组成员]才可以新建任务 #new
   - 触发 event
 - 任务必须要有名字 #create / # update
-- [项目组成员]才可以访问任务页面 #index
+- [项目组成员]才可以访问任务页面 #show
 - [项目组成员]才可以编辑任务 #edit
   - 触发 event
 - [项目管理员/任务创建者]才可以删除任务 #destroy

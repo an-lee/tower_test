@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170404023814) do
+ActiveRecord::Schema.define(version: 20170406084222) do
 
   create_table "accesses", force: :cascade do |t|
     t.integer  "user_id"
@@ -26,19 +26,18 @@ ActiveRecord::Schema.define(version: 20170404023814) do
     t.integer  "team_id"
     t.integer  "project_id"
     t.integer  "todo_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.integer  "category",   default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "messages", force: :cascade do |t|
-    t.string   "title"
     t.text     "content"
     t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "todo_id"
     t.integer  "project_id"
+    t.index ["project_id"], name: "index_messages_on_project_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -48,6 +47,8 @@ ActiveRecord::Schema.define(version: 20170404023814) do
     t.integer  "team_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.index ["team_id"], name: "index_projects_on_team_id"
+    t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
   create_table "team_relationships", force: :cascade do |t|
@@ -63,6 +64,7 @@ ActiveRecord::Schema.define(version: 20170404023814) do
     t.integer  "user_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.index ["user_id"], name: "index_teams_on_user_id"
   end
 
   create_table "todos", force: :cascade do |t|
@@ -77,6 +79,8 @@ ActiveRecord::Schema.define(version: 20170404023814) do
     t.boolean  "is_trash",     default: false
     t.boolean  "is_completed", default: false
     t.integer  "team_id"
+    t.index ["project_id"], name: "index_todos_on_project_id"
+    t.index ["user_id"], name: "index_todos_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
