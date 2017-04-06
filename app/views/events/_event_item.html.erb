@@ -7,6 +7,7 @@
     <h4><%= event.created_at.strftime('%y-%m-%d') %></h4>
     <hr>
   <% end %>
+
   <% if project != event.project.title %>
     <h4 style="text-align:right"> <%= event.project.title %> </h4>
     -------------<br>
@@ -30,4 +31,6 @@
       <% project = event.project.title %>
       <% date = event.created_at.strftime('%y-%m-%d').to_s %>
   <% end %>
+
+
 <% end %>
