@@ -10,9 +10,9 @@ class Message < ApplicationRecord
   def event_build_when_new_message
 
     if self.todo != nil
-      Event.build_todo_message(self.user, "回复了任务", self.todo, self.content, 1)
+      Event.build_todo_message(self.user, "回复了任务", self.todo, self.content)
     else
-      Event.build_proj_message(self.user, "创建了讨论", self.project, self.content, 2)
+      Event.build_proj_message(self.user, "创建了讨论", self.project, self.content)
     end
 
   end

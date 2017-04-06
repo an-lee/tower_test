@@ -82,8 +82,10 @@ class TodosController < ApplicationController
   def check_edit_permission
     if current_user == @project.user
       @todo = Todo.find(params[:id])
-    else
+    elsif current_user.todos.find_by(id: params[:id])
       @todo = current_user.todos.find(params[:id])
+    else
+      redirect_to project_path(@project), alert: "You can trash others' todos!"
     end
   end
 

@@ -161,13 +161,13 @@ RSpec.describe TodosController do
 
     context "signed in not as creator nor admin" do
       before {sign_in not_creator}
-      it "raise errors" do
+      it "show alert and redirect" do
         project = create(:project, user: creator)
         not_creator.join_project!(project)
         todo = create(:todo, user: creator, project: project)
-        expect do
-          get :edit, params: {:project_id => project.id, :id => todo.id}
-        end.to raise_error ActiveRecord::RecordNotFound
+        get :edit, params: {:project_id => project.id, :id => todo.id}
+        expect(response).to redirect_to project_path(project)
+        expect(flash[:alert]).to be_present
       end
 
     end
@@ -282,12 +282,12 @@ RSpec.describe TodosController do
     context "when sign in not as creator nor admin" do
       before {sign_in not_creator}
 
-      it "raise an error" do
+      it "raise alert and redirect" do
         todo = create(:todo, user:creator)
         not_creator.join_project!(todo.project)
-        expect do
-          put :update, params: {project_id: todo.project_id, id: todo.id, todo:{ title: "new Title", description:"new Description"}}
-        end.to raise_error ActiveRecord::RecordNotFound
+        put :update, params: {project_id: todo.project_id, id: todo.id, todo:{ title: "new Title", description:"new Description"}}
+        expect(response).to redirect_to project_path(todo.project)
+        expect(flash[:alert]).to be_present
       end
 
     end
@@ -511,13 +511,13 @@ RSpec.describe TodosController do
 
     context "when sign in not as creator nor admin" do
       before {sign_in not_creator}
-      it "raise errors" do
+      it "raise alert and redirect" do
         project = create(:project, user: creator)
         not_creator.join_project!(project)
         todo = create(:todo, project: project, user: creator)
-        expect do
-          post :trash, params: {project_id: project.id, id: todo.id, todo: {is_trash: true} }
-        end.to raise_error ActiveRecord::RecordNotFound
+        post :trash, params: {project_id: project.id, id: todo.id, todo: {is_trash: true} }
+        expect(response).to redirect_to project_path(todo.project)
+        expect(flash[:alert]).to be_present
       end
 
     end
@@ -577,13 +577,13 @@ RSpec.describe TodosController do
 
     context "when sign in not as creator nor admin" do
       before {sign_in not_creator}
-      it "raise errors" do
+      it "raise alert and redirect" do
         project = create(:project, user: creator)
         not_creator.join_project!(project)
         todo = create(:todo, project: project, user: creator, is_trash: true)
-        expect do
-          post :untrash, params: {project_id: project.id, id: todo.id, todo: {is_trash: false} }
-        end.to raise_error ActiveRecord::RecordNotFound
+        post :untrash, params: {project_id: project.id, id: todo.id, todo: {is_trash: false} }
+        expect(response).to redirect_to project_path(project)
+        expect(flash[:alert]).to be_present
       end
 
     end

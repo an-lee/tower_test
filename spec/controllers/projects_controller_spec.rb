@@ -128,49 +128,39 @@ RSpec.describe ProjectsController, type: :controller do
     let(:user) {create(:user)}
     before { sign_in user }
 
-    context "when user is a member of team" do
-
-      context "when user is a member of project" do
-        before do
-          @team = create(:team, user: user)
-          user.join_team!(@team)
-          @project = create(:project, user: user, team: @team)
-          post :join, params: {id: @project.id, team_id: @team.id}
-        end
-
-        it "assigns @project" do
-          get :show, params: {id: @project.id}
-          expect(assigns[:project]).to eq(@project)
-        end
-
-        it "render show template" do
-          get :show, params: {id: @project.id}
-          expect(response).to render_template("show")
-        end
-
+    context "when user is a member of project" do
+      before do
+        @team = create(:team, user: user)
+        user.join_team!(@team)
+        @project = create(:project, user: user, team: @team)
+        post :join, params: {id: @project.id, team_id: @team.id}
       end
 
-      context "when user is not a member of project" do
-
-        it "redirect_to root_path" do
-          team = create(:team, user: user)
-          user.join_team!(team)
-          project = create(:project, user: user, team: team)
-          get :show, params: {id: project.id}
-          expect(response).to redirect_to root_path
-        end
-
+      it "assigns @project" do
+        get :show, params: {id: @project.id}
+        expect(assigns[:project]).to eq(@project)
       end
+
+      it "render show template" do
+        get :show, params: {id: @project.id}
+        expect(response).to render_template("show")
+      end
+
     end
 
-    context "when user is not a member of team" do
-      let(:project) {create(:project)}
-      it "raise errors" do
-        expect do
-          get :show, params: {id: project.id}
-        end.to raise_error ActiveRecord::RecordNotFound
+    context "when user is not a member of project" do
+
+      it "show alert and redirect_to root_path" do
+        team = create(:team, user: user)
+        user.join_team!(team)
+        project = create(:project, user: user, team: team)
+        get :show, params: {id: project.id}
+        expect(response).to redirect_to root_path
+        expect(flash[:alert]).to be_present
       end
+
     end
+
   end
 
 # =======================

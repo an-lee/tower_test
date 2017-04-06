@@ -5,8 +5,14 @@
   <td><%= project.user.name %></td>
   <td>
     <% if current_user && current_user == project.user %>
-      <%= link_to("Edit", edit_project_path(project), class: "btn btn-sm btn-default") %>
-      <%= link_to("Delete", project_path(project), class: "btn btn-sm btn-default", method: :delete, data: {confirm: "Are you sure?"}) %>
+      <%= link_to("编辑", edit_project_path(project), class: "btn btn-sm btn-default") %>
+      <%= link_to("删除", project_path(project), class: "btn btn-sm btn-default", method: :delete, data: {confirm: "Are you sure?"}) %>
     <% end %>
+    <% if current_user && current_user.is_member_of_project?(project) %>
+      <%= link_to("退出项目", quit_team_project_path(@team, project), class: "btn btn-sm btn-danger", method: :post ) %>
+    <% else %>
+      <%= link_to("加入项目", join_team_project_path(@team, project), class: "btn btn-sm btn-default", method: :post ) %>
+    <% end %>
+
   </td>
 </tr>

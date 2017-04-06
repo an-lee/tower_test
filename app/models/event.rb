@@ -1,4 +1,5 @@
 class Event < ApplicationRecord
+  validates :action, presence: true
   belongs_to :user
   belongs_to :team
   belongs_to :project
@@ -16,27 +17,25 @@ class Event < ApplicationRecord
   end
 
 # 创建任务下的评论 event
-  def self.build_todo_message(user, action, todo, content, category)
+  def self.build_todo_message(user, action, todo, content)
     @event = Event.new(:action => action,
                        :content => content)
     @event.user = user
     @event.todo = todo
     @event.project = todo.project
     @event.team = todo.team
-    @event.category = category
     # byebug
     @event.save!
   end
 
   # 创建项目下的评论 event
-  def self.build_proj_message(user, action, project, content, category)
+  def self.build_proj_message(user, action, project, content)
     @event = Event.new(:action => action,
                        :content => content)
     @event.user = user
     @event.project = project
     # byebug
     @event.team = project.team
-    @event.category = category
     @event.save!
   end
 

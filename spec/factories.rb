@@ -37,4 +37,11 @@ FactoryGirl.define do
     todo
   end
 
+  factory :event do
+    action "event action"
+    user
+    team
+    project
+  end
+
 end

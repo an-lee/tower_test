@@ -3,7 +3,8 @@ class EventsController < ApplicationController
 
   def index
     @team = current_user.participated_teams.find(params[:team_id])
-    @events = @team.events.recent.paginate(:page => params[:page], :per_page => 50)
+    @events = @team.events.includes(:project, :todo)
+    @events = @events.recent.paginate(:page => params[:page], :per_page => 50)
   end
 
   private

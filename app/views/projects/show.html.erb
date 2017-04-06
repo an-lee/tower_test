@@ -1,7 +1,8 @@
 <div class="col-md-12">
   <div class="group">
 
-    <%= link_to("创建新任务", new_project_todo_path(@project), class:"btn btn-default pull-right") %>
+    <%= link_to("返回团队", team_path(@project.team), class:"btn btn-default pull-right") %>
+    <%= link_to("创建新任务", new_project_todo_path(@project), class:"btn btn-warning pull-right") %>
     <% if current_user && current_user == @project.user %>
       <%= link_to("Edit", edit_project_path(@project), class: "btn btn-primary pull-right") %>
     <% end %>
@@ -12,18 +13,18 @@
   <table class="table">
     <thead>
       <tr>
-        <th>任务创建者</th>
         <th>任务名称</th>
         <th>任务描述</th>
         <th>截止日期</th>
-        <th>完成者</th>
+        <th>责任人</th>
         <th>操作</th>
+        <th>任务创建者</th>
+        <th>项目管理员</th>
       </tr>
     </thead>
     <tbody>
       <% @todos.each do |todo| %>
         <tr>
-          <td><%= todo.user.name %></td>
           <td><%= link_to(todo.title, project_todo_path(@project,todo)) %></td>
           <td><%= todo.description %></td>
           <td>
@@ -50,6 +51,8 @@
               <%= link_to("完成任务", complete_project_todo_path(@project,todo), class: "btn btn-default btn-sm btn-success", :method => :post) %>
             <% end %>
           </td>
+          <td><h4><%= todo.user.name %></td></h4>
+          <td><h4><%= @project.user.name %></td></h4>
         </tr>
       <% end %>
     </tbody>
