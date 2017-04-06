@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   end
 
   resources :projects do
-    resources :todos do
+    resources :todos, only: [:new, :create, :edit, :update, :destroy, :show] do
       member do
         post :trash
         post :untrash

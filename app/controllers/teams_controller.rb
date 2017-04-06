@@ -55,10 +55,10 @@ class TeamsController < ApplicationController
   end
 
   def quit
-    @team = Team.find(params[:id])
+    @team = current_user.participated_teams.find(params[:id])
     if current_user == @team.user
       flash[:alert] = "You are the creator!"
-    elsif current_user.is_member_of_team?(@team)
+    else
       current_user.quit_team!(@team)
     end
     redirect_to team_path(@team)

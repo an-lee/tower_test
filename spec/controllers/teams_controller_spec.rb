@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe TeamsController, type: :controller do
 
-  describe "GET index" do
+  describe "GET index: " do
 
     it "assigns @teams" do
       team1 = create(:team)
@@ -11,7 +11,7 @@ RSpec.describe TeamsController, type: :controller do
       expect(assigns[:teams]).to eq([team1, team2])
     end
 
-    it "render template" do
+    it "render index template" do
       team1 = create(:team)
       team2 = create(:team)
       get :index
@@ -22,7 +22,7 @@ RSpec.describe TeamsController, type: :controller do
 
 # =======================
 
-  describe "GET new" do
+  describe "GET new:" do
 
     context "when user login" do
 
@@ -38,14 +38,13 @@ RSpec.describe TeamsController, type: :controller do
         expect(assigns(:team)).to be_a_new(Team)
       end
 
-      it "render template" do
+      it "render new template" do
         expect(response).to render_template("new")
       end
 
     end
 
     context "when user not login" do
-
       it "redirect_to new_user_session_path" do
         get :new
         expect(response).to redirect_to new_user_session_path
@@ -56,7 +55,7 @@ RSpec.describe TeamsController, type: :controller do
 
 # =======================
 
-  describe "POST create" do
+  describe "POST create:" do
     let(:user) {create(:user)}
     before {sign_in user}
 
@@ -94,7 +93,6 @@ RSpec.describe TeamsController, type: :controller do
         team = build(:team)
         post :create, params: {team: attributes_for(:team)}
         expect(Team.last.user).to eq(user)
-        # byebug
         expect(user.is_member_of_team?(Team.last)).to eq(true)
       end
 
@@ -122,7 +120,7 @@ RSpec.describe TeamsController, type: :controller do
         expect(assigns[:team]).to eq(team)
       end
 
-      it "render template" do
+      it "render show template" do
         get :show, params: {id: team.id}
         expect(response).to render_template("show")
       end
@@ -131,8 +129,9 @@ RSpec.describe TeamsController, type: :controller do
 
     context "when user is not a member of team" do
 
-      it "redirect_to root_path" do
+      it "show alert and redirect_to root_path" do
         get :show, params: {id: team.id}
+        expect(flash[:alert]).to be_present
         expect(response).to redirect_to root_path
       end
 
@@ -156,7 +155,7 @@ RSpec.describe TeamsController, type: :controller do
         expect(assigns[:team]).to eq(team)
       end
 
-      it "renders template" do
+      it "renders edit template" do
         team = create(:team, user:creator)
         get :edit, params: {:id => team.id}
         expect(response).to render_template("edit")
@@ -197,14 +196,14 @@ RSpec.describe TeamsController, type: :controller do
 
         it "changes value" do
           team = create(:team, user:creator)
-          put :update, params: {id: team.id, team:{title: "Title", description:"Description"}}
-          expect(assigns[:team].title).to eq("Title")
-          expect(assigns[:team].description).to eq("Description")
+          put :update, params: {id: team.id, team:{title: "new Title", description:"new Description"}}
+          expect(assigns[:team].title).to eq("new Title")
+          expect(assigns[:team].description).to eq("new Description")
         end
 
         it "redirect_to team_path" do
           team = create(:team, user:creator)
-          put :update, params: {id: team.id, team:{title: "Title", description:"Description"}}
+          put :update, params: {id: team.id, team:{title: "new Title", description:"new Description"}}
           expect(response).to redirect_to team_path(team)
         end
       end
@@ -230,7 +229,7 @@ RSpec.describe TeamsController, type: :controller do
     context "when sign in not as creator" do
       before {sign_in not_creator}
 
-      it "raise an error" do
+      it "raise errors" do
         team = create(:team, user:creator)
         expect do
           put :update, params: {id: team.id, team: { title: "Title", description: "Description"}}
@@ -258,7 +257,7 @@ RSpec.describe TeamsController, type: :controller do
 
       it "delete a record" do
         team = create(:team, user: creator)
-        expect{delete:destroy, params:{id: team.id}}.to change{Team.count}.by(-1)
+        expect{delete :destroy, params:{id: team.id}}.to change{Team.count}.by(-1)
       end
 
       it "redirect_to teams_path" do
@@ -288,7 +287,7 @@ RSpec.describe TeamsController, type: :controller do
     let(:member) {create(:user)}
     let(:not_member) {create(:user)}
 
-    context "when sign in as not member" do
+    context "when sign in as not a team member" do
       before {sign_in not_member}
 
       it "become member of team" do
@@ -310,6 +309,7 @@ RSpec.describe TeamsController, type: :controller do
 
       it "still member of team" do
         team = create(:team, user: member)
+        member.join_team!(team)
         post :join, params: {id: team.id}
         expect(member.is_member_of_team?(team)).to eq(true)
       end
@@ -327,39 +327,58 @@ RSpec.describe TeamsController, type: :controller do
 # =======================
 
   describe "POST quit" do
+    let(:creator) {create(:user)}
     let(:member) {create(:user)}
     let(:not_member) {create(:user)}
 
     context "when sign in as member" do
       before {sign_in member}
 
-      it "become no member of team" do
-        team = create(:team, user: member)
+      it "become no longer a member of team" do
+        team = create(:team, user: creator)
+        member.join_team!(team)
         post :quit, params: {id: team.id}
         expect(member.is_member_of_team?(team)).to eq(false)
       end
 
       it "redirect_to team_path" do
-        team = create(:team, user: member)
+        team = create(:team, user: creator)
+        member.join_team!(team)
         post :quit, params: {id: team.id}
         expect(response).to redirect_to team_path(team)
       end
 
     end
 
-    context "when sign in not as member" do
-      before {sign_in not_member}
+    context "when sign in as creator" do
+      before {sign_in creator}
 
-      it "still no member of team" do
-        team = create(:team, user: member)
+      it "show alert and cannot quit team" do
+        team = create(:team, user: creator)
+        creator.join_team!(team)
         post :quit, params: {id: team.id}
-        expect(not_member.is_member_of_team?(team)).to eq(false)
+        expect(flash[:alert]).to be_present
+        expect(creator.is_member_of_team?(team)).to eq(true)
       end
 
       it "redirect_to team_path" do
-        team = create(:team, user: member)
+        team = create(:team, user: creator)
+        creator.join_team!(team)
         post :quit, params: {id: team.id}
         expect(response).to redirect_to team_path(team)
+      end
+
+    end
+
+
+    context "when sign in not as member" do
+      before {sign_in not_member}
+
+      it "raise errors" do
+        team = create(:team, user: creator)
+        expect do
+          post :quit, params: {id: team.id}
+        end.to raise_error ActiveRecord::RecordNotFound
       end
 
     end

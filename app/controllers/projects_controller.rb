@@ -9,7 +9,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = current_user.participated_projects.find(params[:id])
+    @team = current_user.participated_projects.find(params[:id])
     @todos = @project.todos
   end
 
@@ -30,7 +30,9 @@ class ProjectsController < ApplicationController
     @project.team = @team
     if @project.save
       current_user.join_project!(@project)
-      redirect_to project_path( @project), notice: "New Project Created!"
+      redirect_to team_projects_path(@team), notice: "New Project Created!"
+    else
+      render :new
     end
   end
 
