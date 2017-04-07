@@ -56,6 +56,9 @@
 - belongs_to user
 - belongs_to todo
 - belongs_to project
+- 新建 Message 时触发 event
+  - action = "回复了任务"
+  - action = "创建了讨论"
 
 ### Event Model 
 
