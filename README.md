@@ -64,22 +64,6 @@
 - belongs_to todo
 - belongs_to project
 - belongs_to team
-- 新建 todo 时生成一条 event
-  - action = "创建了任务"
-- todo 的 assign 栏位更新时，生成一条 event
-  - action = "给 #{assign} 指派了任务"
-  - action = "把 #{old_assign} 的任务指派给了 #{new_assign}"
-- todo 的 due 栏位更新时，生成一条 event
-  - action = "将任务完成时间从 没有截止日期 修改为 #{due}"
-  - action = "将任务完成时间从 #{old_due} 修改为 #{new_due}"
-- 删除 todo 时（栏位 is_trash => "true"），新建一条 event
-  - action = "删除了任务"
-- 恢复 todo 时（栏位 is_trash => "false"），新建一条 event
-  - action = "恢复了任务"
-- 完成 todo 时（栏位 is_completed => "true"），新建一条 event
-  - action = "完成了任务"
-- 重新打开 todo 时（栏位 is_completed => "false"），新建一条 event
-  - action = "重新打开了任务"
 
 ## Controller Rspec
 
@@ -112,22 +96,26 @@
 - 任务必须要有名字 #create / #update
 - [项目组成员]才可以新建任务 #new
   - 触发 event
+    - action = "创建了任务"
 - 任务必须要有名字 #create / # update
 - [项目组成员]才可以访问任务页面 #show
 - [项目组成员]才可以编辑任务 #edit
+- [项目管理员/任务创建者]才可以删除/恢复任务 #trash / #untrash
   - 触发 event
-- [项目管理员/任务创建者]才可以删除任务 #destroy
-  - 触发 event
+    - action = "删除了任务"
+    - action = "恢复了任务"
 - [项目成员]才可以指派任务 #assign
   - 触发 event
+    - action = "给 #{assign} 指派了任务"
+    - action = "把 #{old_assign} 的任务指派给了 #{new_assign}"
 - [项目成员]才可以设定任务完成时间 #due
   - 触发 event
+    - action = "将任务完成时间从 没有截止日期 修改为 #{due}"
+    - action = "将任务完成时间从 #{old_due} 修改为 #{new_due}"
 - [项目成员]才可以标记完成状态 #complete / #uncomplete
   - 触发 event
-- [项目管理员/任务创建者]才可以删除任务 #trash
-  - 触发 event
-- [项目管理员/任务创建者]才可以恢复任务 #untrash
-  - 触发 event
+    - action = "完成了任务"
+    - action = "重新打开了任务"
 
 ### Message Controller
 
