@@ -36,6 +36,7 @@ class TodosController < ApplicationController
     @todo.team = @team
 
     if @todo.save
+      Event.build_todo(current_user, "创建了任务", @todo, @todo.project, @todo.team)
       redirect_to project_path(@project)
     else
       render :new
@@ -44,32 +45,50 @@ class TodosController < ApplicationController
   end
 
   def assign
+    old_assgin = @todo.assign
     @todo.update(todo_params)
+    new_assgin = @todo.assign
+    if old_assgin != new_assgin && old_assgin == nil
+      Event.build_todo(current_user, "给 #{new_assgin} 指派了任务", @todo, @todo.project, @todo.team)
+    elsif old_assgin != new_assgin && old_assgin != nil
+      Event.build_todo(current_user, "把 #{old_assgin} 的任务指派给了 #{new_assgin}", @todo, @todo.project, @todo.team)
+    end
     redirect_to project_path(@project)
   end
 
   def due
+    old_due = @todo.due
     @todo.update(todo_params)
+    new_due = @todo.due
+    if new_due != old_due && old_due == nil
+      Event.build_todo(current_user, "将任务完成时间从 没有截止日期 修改为 #{new_due}", @todo, @todo.project, @todo.team)
+    elsif new_due != old_due && old_due != nil
+      Event.build_todo(current_user, "将任务完成时间从 #{old_due} 修改为 #{new_due}", @todo, @todo.project, @todo.team)
+    end
     redirect_to project_path(@project)
   end
 
   def untrash
     @todo.untrash!
+    Event.build_todo(current_user, "恢复了任务", @todo, @todo.project, @todo.team)
     redirect_to project_path(@project)
   end
 
   def trash
     @todo.trash!
+    Event.build_todo(current_user, "删除了任务", @todo, @todo.project, @todo.team)
     redirect_to project_path(@project)
   end
 
   def complete
     @todo.complete!
+    Event.build_todo(current_user, "完成了任务", @todo, @todo.project, @todo.team)
     redirect_to project_path(@project)
   end
 
   def uncomplete
     @todo.uncomplete!
+    Event.build_todo(current_user, "重新打开了任务", @todo, @todo.project, @todo.team)
     redirect_to project_path(@project)
   end
 
