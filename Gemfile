@@ -39,6 +39,7 @@ gem 'bootstrap-sass'
 gem 'simple_form'
 gem 'devise'
 gem 'will_paginate'
+gem 'rack-mini-profiler'
 
 group :development, :test do
   gem 'rspec-rails'
